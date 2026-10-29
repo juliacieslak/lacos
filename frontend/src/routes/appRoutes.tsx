@@ -1,10 +1,10 @@
 // define as rotas do frontend: públicas (login/cadastro), protegidas (Auth0 + sessão no backend)
 // e a área principal (exige cadastro concluído e consentimento LGPD vigente).
 import { lazy, Suspense } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import MainLayout from "../components/layout/mainlayout";
 import Loading from "../components/ui/loading";
-import { PublicOnlyRoute, RequireAuth, RequireCompletedProfile } from "./guards";
+import { PublicOnlyRoute, RequireAuth, RequireCompletedProfile, RootRedirect } from "./guards";
 import LoginPage from "../pages/loginPage";
 import RegisterPage from "../pages/registerPage";
 
@@ -75,7 +75,7 @@ export default function AppRoutes() {
           </Route>
         </Route>
 
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<RootRedirect />} />
       </Routes>
     </Suspense>
   );

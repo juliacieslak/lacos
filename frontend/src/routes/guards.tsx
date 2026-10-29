@@ -10,6 +10,15 @@ import { SessionProvider, useSession } from "../contexts/sessionContext";
 import { useAuth } from "../hooks/useAuth";
 import { useIdleLogout } from "../hooks/useIdleLogout";
 
+// rota raiz "/": é para onde o Auth0 devolve o usuário após o login (?code=...&state=...).
+// É preciso esperar o SDK terminar de processar esses parâmetros ANTES de redirecionar; redirecionar
+// imediatamente apagaria o "code" da URL e o login nunca se completaria (volta para a tela de e-mail em loop).
+export function RootRedirect() {
+  const { isAuthenticated, isLoading } = useAuth0();
+  if (isLoading) return <Loading label="Concluindo login..." fullScreen />;
+  return <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />;
+}
+
 // rotas públicas (login/cadastro): quem já está autenticado vai para o dashboard.
 export function PublicOnlyRoute() {
   const { isAuthenticated, isLoading } = useAuth0();
