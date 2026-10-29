@@ -2,13 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Laços API",
+      "name": "Laços API (backend)",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/src/Lacos.Api/bin/Debug/net8.0/Lacos.Api.dll",
-      "cwd": "${workspaceFolder}/src/Lacos.Api",
-      "env": { "ASPNETCORE_ENVIRONMENT": "Development", "ASPNETCORE_URLS": "https://localhost:7080;http://localhost:5080" },
+      "preLaunchTask": "backend: build",
+      "program": "${workspaceFolder}/backend/src/Lacos.Api/bin/Debug/net8.0/Lacos.Api.dll",
+      "cwd": "${workspaceFolder}/backend/src/Lacos.Api",
+      "env": { "ASPNETCORE_ENVIRONMENT": "Development", "ASPNETCORE_URLS": "http://localhost:5080" },
       "serverReadyAction": { "action": "openExternally", "pattern": "\\bNow listening on:\\s+(https?://\\S+)", "uriFormat": "%s/swagger" }
     }
   ]

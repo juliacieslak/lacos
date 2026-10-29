@@ -1,1 +1,1 @@
-{ "recommendations": ["ms-dotnettools.csdevkit", "ms-dotnettools.csharp", "editorconfig.editorconfig"] }
+{ "recommendations": ["ms-dotnettools.csdevkit", "ms-dotnettools.csharp", "dbaeumer.vscode-eslint", "bradlc.vscode-tailwindcss", "editorconfig.editorconfig"] }

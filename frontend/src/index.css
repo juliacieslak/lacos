@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap");
+
+@import "tailwindcss";
+
+/*
+ * Tokens de design do Laços — paleta "Lavanda & Sage" (equilíbrio, calma e bem-estar).
+ * Cores-base extraídas da referência visual:
+ *   Lavanda Principal #7B6EC7 · Lavanda Clara #C9B8F1 · Sálvia #A7BFA7
+ *   Azul Suave #8FB6D9 · Cinza Neutro #E8E8EF · Branco #FFFFFF
+ * As variações mais escuras (600/700) existem para garantir contraste WCAG AA (≥ 4,5:1) em textos e botões.
+ */
+@theme {
+  --font-sans: "Montserrat", system-ui, sans-serif;
+  --font-display: "Poppins", system-ui, sans-serif;
+
+  /* Lavanda — cor principal da marca */
+  --color-lavender-50: #f6f4fd;
+  --color-lavender-100: #f0ecfb;
+  --color-lavender-200: #e2daf8;
+  --color-lavender-300: #c9b8f1;
+  --color-lavender-400: #a596dd;
+  --color-lavender-500: #7b6ec7;
+  --color-lavender-600: #6b5cb2;
+  --color-lavender-700: #574a99;
+  --color-lavender-800: #433a76;
+
+  /* Sálvia — sucesso, concluído, bem-estar */
+  --color-sage-50: #f2f7f2;
+  --color-sage-100: #e3ede3;
+  --color-sage-200: #c9dbc9;
+  --color-sage-300: #a7bfa7;
+  --color-sage-500: #739a73;
+  --color-sage-700: #4a6e4b;
+
+  /* Azul suave — informação, compromissos */
+  --color-serene-50: #eef5fb;
+  --color-serene-100: #dceaf6;
+  --color-serene-300: #8fb6d9;
+  --color-serene-500: #5d8fbd;
+  --color-serene-700: #3b6890;
+
+  /* Neutros */
+  --color-mist-50: #f8f7fc;
+  --color-mist-100: #f3f3f8;
+  --color-mist-200: #e8e8ef;
+  --color-mist-300: #d5d6e0;
+  --color-mist-400: #98a0b1;
+  --color-mist-500: #667085;
+  --color-mist-700: #3d4a5c;
+  --color-ink: #243447;
+
+  /* Estados (tons suaves compatíveis com a paleta) */
+  --color-danger-50: #fdf0f2;
+  --color-danger-200: #f4c4cd;
+  --color-danger-600: #b4234a;
+  --color-warning-50: #fff7e8;
+  --color-warning-200: #f6dca8;
+  --color-warning-700: #8a5a00;
+
+  --shadow-card: 0 12px 32px rgba(77, 64, 130, 0.08);
+  --shadow-soft: 0 24px 70px rgba(77, 64, 130, 0.1);
+  --radius-card: 1.25rem;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background-color: var(--color-mist-50);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* Foco visível e consistente para navegação por teclado (acessibilidade). */
+:focus-visible {
+  outline: 2px solid var(--color-lavender-500);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
