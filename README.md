@@ -47,25 +47,31 @@ Sem as variáveis do Auth0, o frontend abre uma tela indicando exatamente o que 
 
 ## 2. Configurar o Supabase (estrutura criada manualmente)
 
-A aplicação **não cria nem altera** tabelas, schemas ou sequências: não há migrations, `EnsureCreated` ou scripts SQL
-de inicialização. A estrutura é criada por você diretamente no Supabase; o backend apenas se conecta.
+A aplicação **não cria nem altera** tabelas, schemas ou sequências: não há migrations nem `EnsureCreated`.
+A estrutura é criada por você, executando manualmente o script abaixo no Supabase; o backend apenas se conecta.
 
-1. **Connection string** (somente no backend, nunca no frontend) — em *Project Settings → Database*:
+1. **Connection string** (somente no backend, nunca no frontend) — botão **Connect → Direct → Type: .NET → Method: Session pooler**
+   (a conexão direta do plano grátis exige IPv6):
    ```bash
    cd backend/src/Lacos.Api
-   dotnet user-secrets set "ConnectionStrings:Supabase" "Host=db.<projeto>.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=<senha>;SSL Mode=Require"
+   dotnet user-secrets init   # apenas na primeira vez
+   dotnet user-secrets set "ConnectionStrings:Supabase" "Host=aws-0-<regiao>.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.<projeto>;Password=<senha>;SSL Mode=Require"
    ```
    Em produção use a variável de ambiente `ConnectionStrings__Supabase`.
-2. **Tabelas esperadas** (nomes em `snake_case`): `users`, `user_consents`, `patients`, `patient_user_permissions`,
+2. **Criar a estrutura (uma única vez, manualmente):** no Supabase, abra **SQL Editor → New query**, cole todo o arquivo
+   [`backend/database/lacos-schema.sql`](backend/database/lacos-schema.sql) e clique em **Run**. Ele cria as tabelas,
+   as sequências, a proteção (RLS) e a trilha de auditoria imutável. A aplicação nunca executa esse arquivo sozinha.
+
+   **Tabelas criadas** (nomes em `snake_case`): `users`, `user_consents`, `patients`, `patient_user_permissions`,
    `patient_invitations`, `health_thresholds`, `patient_events`, `notification_preferences`, `notifications`, `audit_logs`,
    `medications`, `medication_administrations`, `health_measurements`, `symptom_records`, `care_diary_entries`,
    `care_routine_tasks`, `care_routine_completions`, `health_conditions`, `surgeries`, `allergies`, `patient_documents`.
    As colunas, tipos, índices e chaves de cada tabela estão declarados em
    `backend/src/Lacos.Infrastructure/Persistence/Configurations/` (um arquivo por grupo de entidades).
-3. **Sequências** usadas nos códigos públicos (RF17 — `U000001`, `P000001`): `user_public_code_seq` e `patient_public_code_seq`.
+3. **Sequências** (já incluídas no script) usadas nos códigos públicos (RF17 — `U000001`, `P000001`): `user_public_code_seq` e `patient_public_code_seq`.
 4. **Storage**: crie um bucket **privado** `patient-documents` e configure `Integrations:Storage` (`Provider=Supabase`,
    `SupabaseUrl`, `ServiceRoleKey` via user-secrets/variável de ambiente). Em desenvolvimento o padrão é disco local.
-5. **Recomendações de segurança no banco** (feitas por você no Supabase):
+5. **Segurança no banco** (já incluída no script):
    - habilitar *Row Level Security* em todas as tabelas e revogar privilégios dos papéis `anon` e `authenticated`,
      para que os dados não fiquem expostos pela API REST pública do Supabase (somente o backend acessa);
    - opcionalmente, uma *trigger* que impeça `UPDATE/DELETE` em `audit_logs` e a função `redact_patient_audit_values(uuid)`
