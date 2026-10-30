@@ -19,6 +19,20 @@ public sealed class CareFlowTests : ApiTestBase
     }
 
     [Fact]
+    public async Task Error_responses_keep_cors_headers_so_the_browser_can_read_them()
+    {
+        // sem o cabeçalho CORS o navegador bloqueia a resposta e o frontend só vê "falha de conexão".
+        var client = Factory.CreateClientFor("auth0|cors", "cors@lacos.test");
+        client.DefaultRequestHeaders.Add("Origin", "https://app.lacos.app");
+
+        var error = await client.GetAsync("/api/patients"); // usuário ainda não registrado → 403
+        error.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        error.Headers.TryGetValues("Access-Control-Allow-Origin", out var origins).Should().BeTrue();
+        origins!.Should().Contain("https://app.lacos.app");
+        (await ErrorCode(error)).Should().Be("USER_NOT_REGISTERED");
+    }
+
+    [Fact]
     public async Task Session_and_onboarding_flow_controls_access()
     {
         var client = Factory.CreateClientFor("auth0|ana", "ana@lacos.test", name: "Ana");
